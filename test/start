@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "Hello, cruel cruel world!"
+/bin/bash
+
