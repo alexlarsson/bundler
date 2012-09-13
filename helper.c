@@ -1,3 +1,5 @@
+#include "config.h"
+
 #define _GNU_SOURCE /* Required for CLONE_NEWNS */
 #include <sys/mount.h>
 #include <sys/stat.h>
@@ -10,8 +12,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
-
-#define BUNDLE_PREFIX "/opt/bundle"
 
 #if 0
 #define __debug__(x) printf x
