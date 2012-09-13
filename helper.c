@@ -39,7 +39,7 @@ main (int argc,
 
   if (argc < 3)
     {
-      fprintf (stderr, "To few arguments");
+      fprintf (stderr, "Too few arguments, need fd and offset");
       return 1;
     }
 
@@ -49,6 +49,14 @@ main (int argc,
   __debug__(("Opening bundle\n"));
 
   fd = atoi (argv[1]);
+
+  /* 0, 1, 2 are taken, also 0 generally means atoi error */
+  if (fd < 3)
+    {
+      fprintf (stderr, "Invalid fd");
+      return 1;
+    }
+
   offset = atol (argv[2]);
 
   /* Find and set up loopback mount */
@@ -78,6 +86,7 @@ main (int argc,
 
       if (ioctl (loop_fd, LOOP_GET_STATUS64, &loopinfo))
 	{
+	  ioctl (loop_fd, LOOP_CLR_FD, 0);
 	  fprintf (stderr, "cannot get up loopback device info");
 	  return 1;
 	}
@@ -86,18 +95,25 @@ main (int argc,
       loopinfo.lo_flags |= LO_FLAGS_READ_ONLY | LO_FLAGS_AUTOCLEAR;
       if (ioctl(loop_fd, LOOP_SET_STATUS64, &loopinfo))
 	{
+	  ioctl (loop_fd, LOOP_CLR_FD, 0);
 	  fprintf (stderr, "cannot set up loopback device");
 	  return 1;
 	}
     }
 
+  /* No need to keep fd open anymore */
+  close (fd);
+
   __debug__(("creating new namespace\n"));
   res = unshare (CLONE_NEWNS);
-  if (res != 0) {
-    perror ("Creating new namespace failed");
-    return 1;
-  }
+  if (res != 0)
+    {
+      perror ("Creating new namespace failed");
+      return 1;
+    }
 
+  /* Mark BUNDLE_PREFIX as a private mount to the
+     new namespace. */
   __debug__(("mount bundle (private)\n"));
   mount_count = 0;
   res = mount (BUNDLE_PREFIX, BUNDLE_PREFIX,
@@ -130,10 +146,14 @@ main (int argc,
 	       "squashfs", MS_MGC_VAL|MS_RDONLY, NULL);
   if (res != 0)
     {
-      perror ("Failed to bind the source directory");
+      perror ("Failed to mount the loopback device");
       goto error_out;
     }
   mount_count++; /* Normal mount succeeded */
+
+  /* No need to keep the loop device open after mount */
+  close (loop_fd);
+  loop_fd = -1;
 
   /* Now we have everything we need CAP_SYS_ADMIN for, so drop setuid */
   setuid (getuid ());
@@ -161,7 +181,11 @@ main (int argc,
   fprintf (stderr, "Out of memory.\n");
 
  error_out:
-  /* TODO: Free loopback device */
+  if (loop_fd > 0)
+    {
+      ioctl (loop_fd, LOOP_CLR_FD, 0);
+      close (loop_fd);
+    }
 
   while (mount_count-- > 0)
     umount (BUNDLE_PREFIX);
