@@ -41,8 +41,8 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %doc README
-%{_bindir}/bundler
-%{_libexecdir}/bundler-helper
+%{_bindir}/bundler-tool
+%{_libexecdir}/bundler-trampoline
    
 %files runtime
 %dir /opt/bundle

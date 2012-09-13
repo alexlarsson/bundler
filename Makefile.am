@@ -25,10 +25,6 @@ noinst_DATA = test.squashfs bundler.spec
 
 bundlerdir = $(datadir)/bundler
 
-bundler_DATA = 					\
-	trampoline.c 				\
-	$(NULL)
-
 test.squashfs:
 	rm -f test.squashfs
 	mksquashfs $(srcdir)/test test.squashfs
@@ -89,6 +85,7 @@ ChangeLog:
 EXTRA_DIST= \
 	bundler-tool.in \
 	bundler.spec.in \
+	bundler.spec \
 	test/start \
 	$(NULL)
 
