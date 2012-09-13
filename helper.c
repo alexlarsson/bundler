@@ -63,7 +63,7 @@ main (int argc,
 	  return 1;
 	}
 
-      if (ioctl (loop_fd, LOOP_SET_FD, (void *)fd))
+      if (ioctl (loop_fd, LOOP_SET_FD, (void *)(size_t)fd))
 	{
 	  close(loop_fd);
 	  loop_fd = -1;

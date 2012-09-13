@@ -175,6 +175,7 @@ get_elf_section_offset (int fd, char *section)
   if (class == ELFCLASS32)
     {
       Elf32_Shdr shdr;
+      shdr.sh_offset = 0;
       get_section32_by_name (fd, &hdr.hdr32,
 			     section,
 			     &shdr);
@@ -183,6 +184,7 @@ get_elf_section_offset (int fd, char *section)
   else
     {
       Elf64_Shdr shdr;
+      shdr.sh_offset = 0;
       get_section64_by_name (fd, &hdr.hdr64,
 			     section,
 			     &shdr);
