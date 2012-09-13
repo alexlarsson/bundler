@@ -2,7 +2,7 @@ Bundler is a very simple application bundling system for Linux systems.
 It gives no system integration, but on the other hand, needs very little
 runtime support.
 
-It mount a squashfs image that is embedded in the bundle executable at
+It mounts a squashfs image that is embedded in the bundle executable at
 /opt/bundle, after first creating a private mount namespace that the
 program and its children runs under. Then it executes
 /opt/bundle/start, passing on the original command line arguments to
@@ -20,6 +20,8 @@ Here is how you use it:
 
 * Build your software into the /opt/bundle prefix, typically using
   something like configure --prefix=/opt/bundle; make; make install.
+* Create /opt/bundle/start and make it executable, verify that running
+  it works with no special environment.
 * Create a squashfs image for /opt/bundle, like so:
   mksquashfs /opt/bundle my-image.squashfs
 * Create an bundle executable:
