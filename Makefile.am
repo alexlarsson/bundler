@@ -8,7 +8,7 @@ AM_CPPFLAGS =					\
 	-DLIBDIR=\"$(libdir)\"			\
 	$(NULL)
 
-bin_PROGRAMS =					\
+bin_SCRIPTS =					\
 	bundler-tool				\
 	$(NULL)
 
@@ -17,7 +17,7 @@ libexec_PROGRAMS =				\
 	bundler-trampoline			\
 	$(NULL)
 
-noinst_PROGRAMS =				\
+noinst_SCRIPTS =				\
 	test-bundle				\
 	$(NULL)
 
@@ -87,10 +87,11 @@ ChangeLog:
 
 
 EXTRA_DIST= \
+	bundler-tool.in \
 	bundler.spec.in \
 	test/start \
 	$(NULL)
 
 DISTCHECK_CONFIGURE_FLAGS=--disable-setuid-install
 
-CLEANFILES=glick2.conf glick.desktop
+CLEANFILES=bundler-tool test.squashfs test-bundle bundler.spec
