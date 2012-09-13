@@ -1,0 +1,28 @@
+Bundler is a very simple application bundling system for Linux systems.
+It gives no system integration, but on the other hand, needs very little
+runtime support.
+
+It mount a squashfs image that is embedded in the bundle executable at
+/opt/bundle, after first creating a private mount namespace that the
+program and its children runs under. Then it executes
+/opt/bundle/start, passing on the original command line arguments to
+that program.
+
+A tiny setuid helper that does the loopback mount and the namespace
+creation is needed for runtime support.
+
+No special environment is set up by bundler itself, so in general the
+start executable will be a shell script that sets up LD_LIBRARY_PATH
+and whatever other env-vars your app needs, pointing into the bundle
+files in /opt/bundle.
+
+Here is how you use it:
+
+* Build your software into the /opt/bundle prefix, typically using
+  something like configure --prefix=/opt/bundle; make; make install.
+* Create a squashfs image for /opt/bundle, like so:
+  mksquashfs /opt/bundle my-image.squashfs
+* Create an bundle executable:
+  bundler-tool my-image.squashfs my-app
+* Package the my-app binary however you want with the external
+  files it needs (like .desktop files and icons).
