@@ -202,12 +202,8 @@ main (int argc, char **argv)
   char **child_argv;
 
   fd = open ("/proc/self/exe", O_RDONLY);
-
   if (fd < 0)
-    {
-      fprintf (stderr, "Unable to open executable\n");
-      return 1;
-    }
+    die ("Unable to open executable\n");
 
   offset = get_elf_section_offset (fd, ".bundle");
   snprintf (fd_buf, sizeof(fd_buf), "%d", fd);
