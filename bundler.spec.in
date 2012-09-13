@@ -1,0 +1,54 @@
+Name:		bundler
+Version:	@version@
+Release:	1%{?dist}
+Summary:	A simple application bundling system
+
+License:	GPLv2+
+URL:		http://people.gnome.org/~alexl/
+Source0:	bundler-%{version}.tar.gz
+
+%description
+Bundler is a very simple system to create application
+bundles on linux. It uses squashfs and private namespaces
+to create a app-private fixed prefix for the bundled files. 
+
+This package contains tools needed to create glick2
+bundles.
+
+%package runtime
+Summary:        Files needed to run bundler bundled files
+Group:          System Environment/Libraries
+License:        GPLv2+
+
+%description runtime
+This package needs the files that bundles created with bundler
+needs at runtime.
+
+%prep
+%setup -q
+
+%build
+%configure --disable-setuid-install
+make V=1 %{?_smp_mflags}
+
+%install
+rm -rf $RPM_BUILD_ROOT
+make install DESTDIR=$RPM_BUILD_ROOT
+
+%clean
+rm -rf %{buildroot}
+
+%files
+%defattr(-,root,root)
+%doc README
+%{_bindir}/bundler
+%{_libexecdir}/bundler-helper
+   
+%files runtime
+%dir /opt/bundle
+%attr(4755,root,root) %{_libexecdir}/bundler-helper
+
+%changelog
+* Thu Sep 13 2012 Alexander Larsson <alexl@redhat.com> - 0.0.1-1
+- Initial version
+

@@ -21,7 +21,7 @@ noinst_PROGRAMS =				\
 	test-bundle				\
 	$(NULL)
 
-noinst_DATA = test.squashfs
+noinst_DATA = test.squashfs bundler.spec
 
 bundlerdir = $(datadir)/bundler
 
@@ -48,7 +48,8 @@ edit = sed \
 	-e 's|@bindir[@]|$(bindir)|g' \
 	-e 's|@libexecdir[@]|$(libexecdir)|g' \
 	-e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
-	-e 's|@prefix[@]|$(prefix)|g'
+	-e 's|@prefix[@]|$(prefix)|g' \
+	-e 's|@version[@]|$(PACKAGE_VERSION)|g'
 
 bundler-tool: Makefile bundler-tool.in
 	rm -f $@ $@.tmp
@@ -57,6 +58,13 @@ bundler-tool: Makefile bundler-tool.in
 	  $(edit) $${srcdir}$@.in >$@.tmp
 	mv $@.tmp $@
 	chmod a+x $@
+
+bundler.spec: Makefile bundler.spec.in
+	rm -f $@ $@.tmp
+	srcdir=''; \
+	  test -f ./$@.in || srcdir=$(srcdir)/; \
+	  $(edit) $${srcdir}$@.in >$@.tmp
+	mv $@.tmp $@
 
 if SETUID_INSTALL
 install-exec-hook:
@@ -79,6 +87,7 @@ ChangeLog:
 
 
 EXTRA_DIST= \
+	bundler.spec.in \
 	test/start \
 	$(NULL)
 

@@ -23,3 +23,4 @@ INSTALL
 test-bundle
 bundler-trampoline
 bundler-tool
+bundler.spec
