@@ -56,6 +56,7 @@ bundler-tool: Makefile bundler-tool.in
 	  test -f ./$@.in || srcdir=$(srcdir)/; \
 	  $(edit) $${srcdir}$@.in >$@.tmp
 	mv $@.tmp $@
+	chmod a+x $@
 
 if SETUID_INSTALL
 install-exec-hook:
