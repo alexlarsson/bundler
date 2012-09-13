@@ -8,32 +8,54 @@ AM_CPPFLAGS =					\
 	-DLIBDIR=\"$(libdir)\"			\
 	$(NULL)
 
+bin_PROGRAMS =					\
+	bundler-tool				\
+	$(NULL)
+
 libexec_PROGRAMS =				\
 	bundler-helper				\
+	bundler-trampoline			\
 	$(NULL)
 
 noinst_PROGRAMS =				\
-	trampoline				\
 	test-bundle				\
 	$(NULL)
 
 noinst_DATA = test.squashfs
 
+bundlerdir = $(datadir)/bundler
+
+bundler_DATA = 					\
+	trampoline.c 				\
+	$(NULL)
+
 test.squashfs:
 	rm -f test.squashfs
 	mksquashfs $(srcdir)/test test.squashfs
 
-trampoline_SOURCES = trampoline.c
+bundler_trampoline_SOURCES = trampoline.c
 
 bundler_helper_SOURCES = helper.c
 
-test-bundle: trampoline test.squashfs
-	cp trampoline test-bundle
+test-bundle: bundler-trampoline test.squashfs
+	cp bundler-trampoline test-bundle
 	objcopy --add-section .bundle=test.squashfs test-bundle
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(BUNDLE_PREFIX)
-	$(mkinstalldirs) $(DESTDIR)$(SESSION_PREFIX)
+
+edit = sed \
+	-e 's|@bindir[@]|$(bindir)|g' \
+	-e 's|@libexecdir[@]|$(libexecdir)|g' \
+	-e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
+	-e 's|@prefix[@]|$(prefix)|g'
+
+bundler-tool: Makefile bundler-tool.in
+	rm -f $@ $@.tmp
+	srcdir=''; \
+	  test -f ./$@.in || srcdir=$(srcdir)/; \
+	  $(edit) $${srcdir}$@.in >$@.tmp
+	mv $@.tmp $@
 
 if SETUID_INSTALL
 install-exec-hook:

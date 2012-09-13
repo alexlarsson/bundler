@@ -1,0 +1,5 @@
+#!/bin/sh
+# Usage bundler-tool <bundle file> <squashfs file>
+
+cp "@libexecdir@/bundler-trampoline" "$1"
+objcopy --add-section .bundle="$2" "$1"
