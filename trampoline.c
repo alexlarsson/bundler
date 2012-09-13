@@ -218,5 +218,5 @@ main (int argc, char **argv)
     child_argv[j++] = argv[i];
   child_argv[j++] = NULL;
 
-  return execv ("./helper", child_argv);
+  return execv (LIBEXECDIR"/bundler-helper", child_argv);
 }
