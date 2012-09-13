@@ -70,6 +70,8 @@ main (int argc,
 	  fprintf (stderr, "no available loopback device!");
 	  return 1;
 	}
+      else if (loop_fd < 0)
+	continue;
 
       if (ioctl (loop_fd, LOOP_SET_FD, (void *)(size_t)fd))
 	{
