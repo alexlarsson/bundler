@@ -28,3 +28,14 @@ Here is how you use it:
   bundler-tool my-image.squashfs my-app
 * Package the my-app binary however you want with the external
   files it needs (like .desktop files and icons).
+
+As an additional help you can use the bundler-builder tool which runs
+a specified command with a given directory mounted at /opt/bundle
+inside a private namespace. For instance you can do:
+
+ mkdir /tmp/bundle-data
+ bundler-builder /tmp/bundle-data ./configure --prefix=/opt/bundle
+ bundler-builder /tmp/bundle-data make
+ bundler-builder /tmp/bundle-data make install
+
+Then you can create a squashfs image from /tmp/bundle-data.
