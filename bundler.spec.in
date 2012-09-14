@@ -7,6 +7,10 @@ License:	GPLv2+
 URL:		http://people.gnome.org/~alexl/
 Source0:	bundler-%{version}.tar.gz
 
+BuildRequires: squashfs-tools binutils
+
+Requires: squashfs-tools binutils
+
 %description
 Bundler is a very simple system to create application
 bundles on linux. It uses squashfs and private namespaces
