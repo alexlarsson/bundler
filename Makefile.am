@@ -8,6 +8,10 @@ AM_CPPFLAGS =					\
 	-DLIBDIR=\"$(libdir)\"			\
 	$(NULL)
 
+bin_PROGRAMS =					\
+	bundler-builder				\
+	$(NULL)
+
 bin_SCRIPTS =					\
 	bundler-tool				\
 	$(NULL)
@@ -32,6 +36,8 @@ test.squashfs:
 bundler_trampoline_SOURCES = trampoline.c
 
 bundler_helper_SOURCES = helper.c
+
+bundler_builder_SOURCES = builder.c
 
 test-bundle: bundler-trampoline test.squashfs
 	cp bundler-trampoline test-bundle
@@ -66,6 +72,8 @@ if SETUID_INSTALL
 install-exec-hook:
 	chown root $(DESTDIR)$(libexecdir)/bundler-helper
 	chmod 4755 $(DESTDIR)$(libexecdir)/bundler-helper
+	chown root $(DESTDIR)$(bindir)/bundler-builder
+	chmod 4755 $(DESTDIR)$(bindir)/bundler-builder
 endif
 
 ChangeLog:

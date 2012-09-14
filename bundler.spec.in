@@ -47,6 +47,7 @@ rm -rf %{buildroot}
 %doc README
 %{_bindir}/bundler-tool
 %{_libexecdir}/bundler-trampoline
+%attr(4755,root,root) %{_bindir}/bundler-builder
    
 %files runtime
 %dir /opt/bundle
