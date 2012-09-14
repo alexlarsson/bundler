@@ -25,7 +25,7 @@ Here is how you use it:
 * Create a squashfs image for /opt/bundle, like so:
   mksquashfs /opt/bundle my-image.squashfs
 * Create an bundle executable:
-  bundler-tool my-image.squashfs my-app
+  bundler-create my-image.squashfs my-app
 * Package the my-app binary however you want with the external
   files it needs (like .desktop files and icons).
 

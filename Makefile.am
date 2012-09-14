@@ -13,7 +13,7 @@ bin_PROGRAMS =					\
 	$(NULL)
 
 bin_SCRIPTS =					\
-	bundler-tool				\
+	bundler-create				\
 	$(NULL)
 
 libexec_PROGRAMS =				\
@@ -53,7 +53,7 @@ edit = sed \
 	-e 's|@prefix[@]|$(prefix)|g' \
 	-e 's|@version[@]|$(PACKAGE_VERSION)|g'
 
-bundler-tool: Makefile bundler-tool.in
+bundler-create: Makefile bundler-create.in
 	rm -f $@ $@.tmp
 	srcdir=''; \
 	  test -f ./$@.in || srcdir=$(srcdir)/; \
@@ -91,7 +91,7 @@ ChangeLog:
 
 
 EXTRA_DIST= \
-	bundler-tool.in \
+	bundler-create.in \
 	bundler.spec.in \
 	bundler.spec \
 	test/start \
@@ -99,4 +99,4 @@ EXTRA_DIST= \
 
 DISTCHECK_CONFIGURE_FLAGS=--disable-setuid-install
 
-CLEANFILES=bundler-tool test.squashfs test-bundle bundler.spec
+CLEANFILES=bundler-create test.squashfs test-bundle bundler.spec

@@ -22,6 +22,6 @@ test.squashfs
 INSTALL
 test-bundle
 bundler-trampoline
-bundler-tool
+bundler-create
 bundler-builder
 bundler.spec
