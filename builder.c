@@ -138,6 +138,10 @@ main (int argc,
     child_argv[j++] = argv[i];
   child_argv[j++] = NULL;
 
+  /* LD_LIBRARY_PATH is unset by the helper being setuid, and we almost
+     always want it set, so just do it */
+  setenv ("LD_LIBRARY_PATH", BUNDLE_PREFIX "/lib", 1);
+
   __debug__(("launch executable %s\n", executable));
   return execvp (executable, child_argv);
 
