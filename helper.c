@@ -145,7 +145,7 @@ main (int argc,
 
   __debug__(("mount source %s to %s\n", loopname, BUNDLE_PREFIX));
   res = mount (loopname, BUNDLE_PREFIX,
-	       "squashfs", MS_MGC_VAL|MS_RDONLY, NULL);
+	       "squashfs", MS_MGC_VAL|MS_RDONLY|MS_NODEV|MS_NOSUID, NULL);
   if (res != 0)
     {
       perror ("Failed to mount the loopback device");
